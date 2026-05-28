@@ -1,13 +1,17 @@
-// script.js
+// =========================
+// SCRIPT.JS
+// =========================
 
-document.querySelector(".contact-form")
-.addEventListener("submit", function(e){
+document
+  .querySelector(".contact-form")
+  .addEventListener("submit", function(e){
 
-  e.preventDefault();
+    e.preventDefault();
 
-  alert(
-    "Thank you for contacting Triangle Coatings. A representative will reach out shortly."
-  );
+    alert(
+      "Thank you for contacting Triangle Coatings. A representative will contact you shortly."
+    );
 
-  this.reset();
+    this.reset();
+
 });
