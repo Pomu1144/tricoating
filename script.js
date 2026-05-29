@@ -311,3 +311,31 @@ document.querySelector(".order-lookup-form")?.addEventListener("submit", (event)
 });
 
 renderCart();
+
+const safetySearch = document.querySelector(".safety-search");
+const safetyCards = Array.from(document.querySelectorAll(".sheet-card"));
+const safetyCount = document.querySelector("[data-safety-count]");
+const noSheetsMessage = document.querySelector("[data-no-sheets]");
+
+function updateSafetyLookup() {
+  if (!safetyCards.length) return;
+
+  const query = safetySearch?.value.trim().toLowerCase() || "";
+  let visibleCount = 0;
+
+  safetyCards.forEach((card) => {
+    const text = `${card.dataset.sheetText || ""} ${card.textContent}`.toLowerCase();
+    const isVisible = !query || text.includes(query);
+    card.hidden = !isVisible;
+    if (isVisible) visibleCount += 1;
+  });
+
+  if (safetyCount) safetyCount.textContent = String(visibleCount);
+  if (noSheetsMessage) noSheetsMessage.hidden = visibleCount !== 0;
+}
+
+safetySearch?.addEventListener("input", updateSafetyLookup);
+safetySearch?.form?.addEventListener("reset", () => {
+  window.setTimeout(updateSafetyLookup, 0);
+});
+updateSafetyLookup();
