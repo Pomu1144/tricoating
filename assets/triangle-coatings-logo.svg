@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" role="img" aria-labelledby="title desc">
+  <title id="title">Triangle Coatings Inc. logo</title>
+  <desc id="desc">Red triangle mark with gold inner triangle and Triangle Coatings Inc. wordmark.</desc>
+  <defs>
+    <style>
+      .red{fill:#9b1016}.gold{fill:#c49a3a}.word{font-family:Georgia,'Times New Roman',serif;font-weight:700;letter-spacing:.03em}.small{font-family:Arial,sans-serif;font-weight:700;letter-spacing:.16em}
+    </style>
+  </defs>
+  <rect width="300" height="120" fill="none"/>
+  <path class="red" d="M24 95 82 18l58 77H24Zm21-12h74L82 34 45 83Z"/>
+  <path class="gold" d="M82 45 58 77h48L82 45Z"/>
+  <text class="word red" x="154" y="50" font-size="30">Triangle</text>
+  <text class="word red" x="154" y="78" font-size="25">Coatings</text>
+  <text class="small gold" x="157" y="97" font-size="11">INC.</text>
+</svg>
