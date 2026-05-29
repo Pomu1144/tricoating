@@ -1,503 +1,79 @@
-<!-- =========================
-INDEX.HTML
-========================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Triangle Coatings | Professional Refinishing Systems</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Triangle Coatings Inc. – Your Total Coating Solution</title>
+  <meta name="description" content="Triangle Coatings Inc. manufactures industrial coatings, concrete sealers, decorative coatings, tub and tile coatings, artist oils, and architectural coatings." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-  <!-- NAVBAR -->
-  <header class="navbar">
-
-    <div class="logo">
-      TRIANGLE COATINGS
+  <header class="site-header" id="top">
+    <div class="topbar">
+      <div class="topbar__inner">
+        <a class="topbar__brand" href="index.html" aria-label="Triangle Coatings home">
+          <img class="site-logo" src="assets/tricoating.png" alt="Triangle Coatings Inc. logo" />
+          <span>Triangle Coatings Inc.</span>
+        </a>
+        <div class="topbar__contacts" aria-label="Contact information">
+          <a href="tel:+19255830800"><span>Call Us Today</span><strong>1-925-583-0800</strong></a>
+          <a href="mailto:sales@tricoat.com"><span>Email</span><strong>sales@tricoat.com</strong></a>
+          <a class="jump-sites-link" href="jumpsites.html"><span>Reglazing</span><strong>Quick Access</strong></a>
+          <a class="cart-link" href="store.html#cart"><span>Online Store</span><strong>Cart (<b data-cart-count>0</b>)</strong></a>
+        </div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation"><span></span><span></span><span></span><span class="sr-only">Menu</span></button>
+      </div>
     </div>
-
-    <nav>
-      <a href="#about">About</a>
-      <a href="#services">Products</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
+    <nav class="primary-nav" id="primary-navigation" aria-label="Primary navigation">
+      <div class="primary-nav__inner">
+        <a href="index.html">Home</a>
+        <div class="nav-group"><button type="button">About Us</button><div class="dropdown"><a href="about.html">Company Info</a><a href="about.html#contact-us">Contact Us</a><a href="about.html#faq">Triangle Coatings FAQ</a><a href="about.html#history">Our History</a><a href="about.html#international">International</a><a href="about.html#new-products">New Products</a><a href="about.html#news-events">News & Events</a><a href="about.html#order-info">Order and Shipping Info</a><a href="about.html#paint-manufacturer">Paint Manufacturer</a><a href="about.html#sales-terms">Sales Terms</a></div></div>
+        <div class="nav-group nav-group--mega"><button type="button">Industrial Coating</button><div class="dropdown mega-menu"><div><h3>Category A</h3><a href="store.html?category=industrial">Alkyd Primers & Enamels</a><a href="store.html?category=industrial">Aluminum/Metallic Finishes</a><a href="store.html?category=industrial">Antenna Coatings</a><a href="store.html?category=industrial">Epoxy Primers & Enamels</a><a href="store.html?category=industrial">Heavy Equipment Coatings</a><a href="store.html?category=industrial">Industrial Coatings</a><a href="store.html?category=industrial">Industrial Maintenance</a><a href="store.html?category=industrial">Low VOC Coatings</a><a href="store.html?category=industrial">Marine Coatings</a></div><div><h3>Category B</h3><a href="store.html?category=industrial">Custom Formulation</a><a href="store.html?category=industrial">Caltrans Specified Coatings</a><a href="store.html?category=industrial">Government Specified Coatings</a><a href="store.html?category=industrial">OEM Industrial Finishes</a></div></div></div>
+        <div class="nav-group"><button type="button">Concrete Sealer</button><div class="dropdown"><a href="store.html?category=concrete">Concrete Sealer: All Products</a><a href="store.html?category=concrete">Countertop Sealers</a><a href="store.html?category=concrete">Floor Polish</a><a href="store.html?category=concrete">High Gloss Sealers</a><a href="store.html?category=concrete">Low VOC Products</a><a href="store.html?category=concrete">Paver Sealer</a><a href="store.html?category=concrete">Water Based Sealers</a></div></div>
+        <a href="store.html?category=decorative">Decorative Coating</a><a href="store.html?category=tubtile">Tub & Tile Coating</a><a href="store.html?category=artist">Artist Oils</a><a href="store.html?category=architectural">Architectural Coating</a><a href="login.html">Login</a><a class="store-link" href="store.html">Store</a>
+      </div>
     </nav>
-
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-
-    <div class="hero-overlay"></div>
-
-    <div class="hero-content">
-
-      <span class="hero-badge">
-        VOC Certified Coating Systems
-      </span>
-
-      <h1>
-        Professional Countertop, Bathtub, Tile, Sink & Toilet Refinishing
-      </h1>
-
-      <p>
-        Triangle Coatings delivers professional-grade glazing and industrial coating systems
-        designed to restore surfaces to a smooth, factory-like finish while saving homeowners
-        and contractors thousands in replacement costs.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="#contact" class="btn primary-btn">
-          Request Information
-        </a>
-
-        <a href="#process" class="btn secondary-btn">
-          View Process
-        </a>
+  <main>
+    <section class="hero" aria-label="Featured Triangle Coatings products">
+      <div class="hero__slides">
+        <article class="hero-slide is-active"><div class="hero-slide__image hero-slide__image--architectural"></div><div class="hero-slide__content"><p>Your Total Coatings Solution</p><h1>Architectural Coating</h1><a class="button" href="store.html?category=architectural">Read More</a></div></article>
+        <article class="hero-slide"><div class="hero-slide__image hero-slide__image--industrial"></div><div class="hero-slide__content"><p>Quality, Value, and Service</p><h1>Industrial Coating</h1><a class="button" href="store.html?category=industrial">Read More</a></div></article>
+        <article class="hero-slide"><div class="hero-slide__image hero-slide__image--artist"></div><div class="hero-slide__content"><p>Rich and Pure Colors</p><h1>Classic Artist Oils</h1><a class="button" href="store.html?category=artist">Read More</a></div></article>
       </div>
+      <button class="slider-control slider-control--prev" type="button" aria-label="Previous slide">‹</button><button class="slider-control slider-control--next" type="button" aria-label="Next slide">›</button><div class="slider-dots" aria-label="Select slide"></div>
+    </section>
 
-    </div>
-
-  </section>
-
-  <!-- ABOUT -->
-  <section class="section" id="about">
-
-    <div class="container">
-
-      <div class="section-heading">
-
-        <span>ABOUT TRIANGLE COATINGS</span>
-
-        <h2>
-          Professional Two-Step Glazing & Coating Systems
-        </h2>
-
+    <section class="conversion-strip" aria-label="Why customers choose Triangle Coatings">
+      <div class="container conversion-strip__grid">
+        <div><strong>Since 1932</strong><span>Family-owned coatings manufacturer</span></div>
+        <div><strong>VOC Certified</strong><span>Reglazing systems for all states</span></div>
+        <div><strong>Technical Help</strong><span>Call 1-925-583-0800 for product selection</span></div>
+        <div><strong>Custom Formulation</strong><span>Industrial, architectural, and specialty coatings</span></div>
       </div>
-
-      <div class="about-grid">
-
-        <div class="about-text">
-
-          <p>
-            Triangle Coatings specializes in professional refinishing systems for countertops,
-            bathtubs, tile, sinks, toilets, and industrial coating applications.
-          </p>
-
-          <p>
-            Our advanced two-step glazing process restores worn or outdated surfaces to a
-            modern, high-gloss finish without the high cost of replacement.
-          </p>
-
-          <p>
-            Designed for professional installers and contractors, our coating systems are
-            engineered for durability, strong adhesion, and long-lasting performance.
-          </p>
-
-        </div>
-
-        <div class="about-card">
-
-          <div class="feature-box">
-            <h3>VOC Certified</h3>
-
-            <p>
-              Certified to meet VOC requirements in all states.
-            </p>
-          </div>
-
-          <div class="feature-box">
-            <h3>Professional Grade</h3>
-
-            <p>
-              Designed for high-performance industrial and refinishing applications.
-            </p>
-          </div>
-
-          <div class="feature-box">
-            <h3>Cost Effective</h3>
-
-            <p>
-              Save thousands compared to replacing tubs, tile, countertops, and fixtures.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- PRODUCTS -->
-  <section class="section dark-section" id="services">
-
-    <div class="container">
-
-      <div class="section-heading center">
-
-        <span>PRODUCTS</span>
-
-        <h2>
-          Professional Coating Solutions
-        </h2>
-
-      </div>
-
-      <div class="service-grid">
-
-        <div class="service-card">
-          <h3>Industrial Coating</h3>
-
-          <p>
-            Durable coating systems designed for industrial environments and demanding applications.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Concrete Sealer</h3>
-
-          <p>
-            Protective sealers engineered to improve durability and surface longevity.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Decorative Coating</h3>
-
-          <p>
-            High-quality decorative finishes for modern commercial and residential spaces.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Tub & Tile Coatings</h3>
-
-          <p>
-            Restore bathtubs, tile surrounds, sinks, and fixtures with a factory-like finish.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Artist Oils</h3>
-
-          <p>
-            Professional oil-based coating products for artistic and specialty applications.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <h3>Architectural Coating</h3>
-
-          <p>
-            High-performance architectural coating systems for modern construction projects.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- PROCESS -->
-  <section class="section" id="process">
-
-    <div class="container">
-
-      <div class="section-heading">
-
-        <span>REFINISHING PROCESS</span>
-
-        <h2>
-          Surface Preparation & Professional Glazing
-        </h2>
-
-      </div>
-
-      <div class="process-grid">
-
-        <!-- STEP 1 -->
-        <div class="process-card">
-
-          <div class="step-number">
-            01
-          </div>
-
-          <h3>Surface Preparation</h3>
-
-          <ul>
-            <li>Deep industrial cleaning</li>
-            <li>Silicone & caulk removal</li>
-            <li>Acid etching</li>
-            <li>Sanding for adhesion</li>
-            <li>Repairing chips & cracks</li>
-            <li>Final solvent wipe</li>
-            <li>Masking & protection</li>
-            <li>Tack rag dust removal</li>
-          </ul>
-
-        </div>
-
-        <!-- STEP 2 -->
-        <div class="process-card">
-
-          <div class="step-number">
-            02
-          </div>
-
-          <h3>Primer Application</h3>
-
-          <p>
-            The primer coating is professionally mixed and evenly sprayed
-            onto the prepared surface to maximize adhesion and durability.
-          </p>
-
-          <div class="mix-box">
-
-            <strong>Primer Ratio</strong>
-
-            <p>
-              70% Primer / 30% Reducer
-            </p>
-
-          </div>
-
-        </div>
-
-        <!-- STEP 3 -->
-        <div class="process-card">
-
-          <div class="step-number">
-            03
-          </div>
-
-          <h3>Final Glaze Finish</h3>
-
-          <p>
-            The final coating is chemically induced and professionally sprayed
-            to produce a smooth, high-gloss, factory-like finish.
-          </p>
-
-          <div class="mix-box">
-
-            <strong>Final Coat Ratio</strong>
-
-            <p>50% White Porcelain</p>
-            <p>30% Activator</p>
-            <p>20% Reducer</p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- EQUIPMENT -->
-  <section class="section dark-section">
-
-    <div class="container">
-
-      <div class="section-heading center">
-
-        <span>PROFESSIONAL EQUIPMENT</span>
-
-        <h2>
-          HVLP & Fine-Finish Spray Systems
-        </h2>
-
-      </div>
-
-      <div class="equipment-box">
-
-        <p>
-          Triangle Coatings systems are engineered for professional applications
-          using HVLP and fine-finish spray technology for smooth, consistent coverage.
-        </p>
-
-        <div class="equipment-tags">
-
-          <span>Graco Systems</span>
-          <span>Titan CapSpray</span>
-          <span>HVLP Technology</span>
-          <span>Fine Finish Tips</span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section">
-
-    <div class="container">
-
-      <h2>
-        Transform Kitchens & Bathrooms Without Replacement
-      </h2>
-
-      <p>
-        Professional refinishing systems that deliver modern results while helping save thousands in renovation costs.
-      </p>
-
-      <a href="#contact" class="btn primary-btn">
-        Contact Us Today
-      </a>
-
-    </div>
-
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section" id="contact">
-
-    <div class="container">
-
-      <div class="section-heading">
-
-        <span>CONTACT US</span>
-
-        <h2>
-          Request Information
-        </h2>
-
-      </div>
-
-      <div class="contact-grid">
-
-        <!-- INFO -->
-        <div class="contact-info">
-
-          <h3>Triangle Coatings</h3>
-
-          <p class="contact-subtitle">
-            Professional Industrial & Refinishing Coating Systems
-          </p>
-
-          <div class="info-item">
-            <strong>Call Us Today</strong>
-            <p>1-925-583-0800</p>
-          </div>
-
-          <div class="info-item">
-            <strong>Email</strong>
-            <p>sales@tricoat.com</p>
-          </div>
-
-          <div class="info-item">
-            <strong>Fax</strong>
-            <p>1-925-583-0880</p>
-          </div>
-
-          <div class="info-item">
-            <strong>Address</strong>
-            <p>
-              5625 Brisa Street, Unit A<br>
-              Livermore, CA 94550
-            </p>
-          </div>
-
-          <div class="info-item">
-            <strong>Order Information</strong>
-
-            <p>
-              Domestic Orders: 925-583-0800
-            </p>
-
-            <p>
-              International Orders: (+01) 925-583-0800
-            </p>
-
-            <p>
-              Orders Email: orders@tricoat.com
-            </p>
-          </div>
-
-        </div>
-
-        <!-- FORM -->
-        <form class="contact-form">
-
-          <input type="text" placeholder="Full Name" required>
-
-          <input type="email" placeholder="Email Address" required>
-
-          <input type="text" placeholder="Phone Number">
-
-          <select required>
-
-            <option value="">
-              Select Product Interest
-            </option>
-
-            <option>
-              Industrial Coating
-            </option>
-
-            <option>
-              Concrete Sealer
-            </option>
-
-            <option>
-              Decorative Coating
-            </option>
-
-            <option>
-              Tub & Tile Coatings
-            </option>
-
-            <option>
-              Artist Oils
-            </option>
-
-            <option>
-              Architectural Coating
-            </option>
-
-          </select>
-
-          <textarea rows="6" placeholder="Tell us about your project"></textarea>
-
-          <button type="submit" class="btn primary-btn full-btn">
-            Submit Request
-          </button>
-
-        </form>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-
-    <p>
-      © 2026 Triangle Coatings | tricoat.com
-    </p>
-
-  </footer>
-
+    </section>
+
+    <section class="product-categories" id="products">
+      <div class="container"><div class="category-grid">
+        <a class="category-card" href="store.html?category=industrial"><span class="category-card__icon">⚙</span><h3>Industrial Coatings</h3><p>Cost-effective, high-performance coatings for metal, maintenance, OEM, government specification, marine, antenna, and heavy equipment work.</p></a>
+        <a class="category-card" href="store.html?category=concrete"><span class="category-card__icon">◆</span><h3>Concrete Sealers <small>White Mountain™</small></h3><p>Countertop, floor, paver, penetrating, high-gloss, water-based, and slip-resistant sealer options for concrete, masonry, and stone.</p></a>
+        <a class="category-card" href="store.html?category=decorative"><span class="category-card__icon">✦</span><h3>Decorative Coating</h3><p>Sophisticated Finishes and Modern Options products for metallic, patina, rust, and architectural effects on paintable surfaces.</p></a>
+        <a class="category-card" href="store.html?category=tubtile"><span class="category-card__icon">▣</span><h3>Tub and Tile Coatings</h3><p>Liquid Porcelain™ refinishing products for commercial and professional tub, tile, sink, and fixture refinishers.</p></a>
+        <a class="category-card" href="store.html?category=artist"><span class="category-card__icon">◐</span><h3>Artist Oils</h3><p>Classic Artist Oils™ manufactured with heavy pigmentation, buttery texture, and consistent professional quality.</p></a>
+        <a class="category-card" href="store.html?category=architectural"><span class="category-card__icon">⌂</span><h3>Architectural Coating</h3><p>Interior and exterior coatings, green coatings, urethane systems, waterborne primers, and custom formulation support.</p></a>
+      </div></div>
+    </section>
+
+    <section class="quote-band"><div class="container quote-band__inner"><div><span class="eyebrow">Let’s talk about your projects.</span><h2>Get A Free Quote</h2></div><a class="button button--light" href="about.html#contact-us">Contact Triangle Coatings</a></div></section>
+
+    <section class="welcome section"><div class="container welcome__grid"><div class="welcome__copy"><span class="eyebrow">Welcome to Triangle Coatings!</span><h2>Your total coatings solution since 1932.</h2><p>Since 1932, Triangle Coatings has provided customers with high quality paints and coatings, responsive service, and immediate access to chemical information and technical advice.</p><p>Today our expanded manufacturing facilities and modern laboratories support Architectural & Decorative Paints, Oil Paints, Concrete Sealers, Industrial Maintenance Coatings, OEM Product Finishes, Government Specification Coatings, custom formulation, and toll manufacturing.</p><p>We remain focused on quality, innovation, environmental responsibility, and friendly customer service for customers around the world.</p></div><div class="welcome__panel"><div class="panel-card"><strong>1932</strong><span>Founded as a regional paint manufacturer.</span></div><div class="panel-card"><strong>Global</strong><span>Serving large and small customers in the United States and internationally.</span></div><div class="panel-card"><strong>Custom</strong><span>Creating formulations when an off-the-shelf coating is not enough.</span></div></div></div></section>
+  </main>
+
+  <footer class="footer"><div class="container footer__grid"><section><h2>Order and Shipping Info</h2><p>Order by phone: <a href="tel:+19255830800">925-583-0800</a></p><p>International Orders: <a href="tel:+019255830800">(+01) 925-583-0800</a></p><p>Order by fax: 925-583-0880</p><p>Order by email: <a href="mailto:orders@tricoat.com">orders@tricoat.com</a></p></section><section><h2>Products</h2><ul><li><a href="store.html?category=industrial">Industrial Coating</a></li><li><a href="store.html?category=concrete">Concrete Sealer</a></li><li><a href="store.html?category=decorative">Decorative Coating</a></li><li><a href="store.html?category=tubtile">Tub & Tile Coatings</a></li><li><a href="store.html?category=artist">Artist Oils</a></li><li><a href="store.html?category=architectural">Architectural Coating</a></li></ul></section><section><h2>Contact</h2><p>Phone: <a href="tel:+19255830800">1-925-583-0800</a></p><p>Fax: 1-925-583-0880</p><p>Email: <a href="mailto:sales@tricoat.com">sales(at)tricoat.com</a></p><p>Address: 5625 Brisa Street, Unit A, Livermore, CA 94550</p><div class="social-links" aria-label="Social media"><a href="https://www.facebook.com/" aria-label="Facebook">f</a><a href="https://www.instagram.com/" aria-label="Instagram">◎</a><a href="https://www.linkedin.com/" aria-label="LinkedIn">in</a><a href="https://www.tiktok.com/" aria-label="TikTok">♪</a></div></section></div><div class="footer__bottom"><p>Powered by Triangle Coatings © 2026 Triangle Coatings Inc. All rights reserved.</p><a class="call-now" href="tel:+19255830800">Call Us Now</a></div></footer>
   <script src="script.js"></script>
-
 </body>
 </html>
