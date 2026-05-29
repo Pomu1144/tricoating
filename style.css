@@ -626,12 +626,6 @@ body{
   overflow-x:hidden;
 }
 
-.topbar__brand img{
-  width:88px;
-  height:auto;
-  display:block;
-  object-fit:contain;
-}
 
 .topbar__contacts .jump-sites-link strong,
 .topbar__contacts .cart-link strong{
@@ -1007,12 +1001,173 @@ body{
   .content-grid{
     grid-template-columns:1fr;
   }
-  .topbar__brand img{
-    width:68px;
-  }
   .contact-panel,
   .store-toolbar{
     align-items:flex-start;
     flex-direction:column;
+  }
+}
+
+/* focused reglazing jump site updates */
+.button,
+.dropdown,
+.category-card,
+.service-list article,
+.jump-card,
+.store-card,
+.sidebar-card,
+.account-card,
+.cart-panel,
+.store-filters,
+.contact-panel,
+.checkout-modal,
+.checkout-card,
+.product-thumb,
+.mix-card,
+.jump-section,
+.jumpsite-menu{
+  border-radius:8px;
+}
+
+
+.reglazing-hero{
+  background:linear-gradient(120deg,rgba(97,6,11,.94),rgba(35,35,35,.62)),url("https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1600&q=80") center/cover;
+}
+
+.reglazing-hero .button{
+  margin-top:12px;
+}
+
+.jumpsite-layout{
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  gap:34px;
+  align-items:start;
+}
+
+.jumpsite-menu{
+  position:sticky;
+  top:18px;
+  padding:22px;
+  border:1px solid var(--line);
+  background:#fff;
+  box-shadow:0 16px 40px rgba(48,38,24,.08);
+}
+
+.jumpsite-menu h2{
+  margin:0 0 14px;
+  color:var(--brand-dark);
+  font-family:"Libre Baskerville",Georgia,serif;
+}
+
+.jumpsite-menu a{
+  display:block;
+  padding:11px 12px;
+  margin-bottom:8px;
+  border:1px solid var(--line);
+  background:#fbf8f2;
+  color:var(--brand-dark);
+  font-weight:800;
+}
+
+.jumpsite-menu a:hover{
+  background:var(--brand);
+  color:#fff;
+}
+
+.jumpsite-content{
+  display:grid;
+  gap:24px;
+}
+
+.jump-section{
+  padding:30px;
+  border:1px solid var(--line);
+  background:#fff;
+  box-shadow:0 10px 28px rgba(48,38,24,.06);
+}
+
+.jump-section h2{
+  margin:8px 0 16px;
+  color:var(--brand-dark);
+  font-family:"Libre Baskerville",Georgia,serif;
+  font-size:clamp(1.7rem,3vw,2.7rem);
+  line-height:1.12;
+}
+
+.jump-callout{
+  margin-top:18px;
+  padding:16px;
+  border-left:4px solid var(--gold);
+  background:#fbf8f2;
+  color:#3b3328;
+}
+
+.step-badge{
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:var(--brand);
+  color:#fff;
+  font-weight:900;
+  font-size:1.2rem;
+}
+
+.process-list{
+  display:grid;
+  gap:12px;
+  padding-left:22px;
+}
+
+.process-list li,
+.equipment-list li{
+  color:#444;
+}
+
+.mix-grid,
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
+}
+
+.mix-card{
+  padding:20px;
+  border:1px solid var(--line);
+  background:#fbf8f2;
+}
+
+.mix-card h3{
+  margin-top:0;
+  color:var(--brand-dark);
+}
+
+.equipment-list{
+  display:grid;
+  gap:12px;
+  padding-left:22px;
+}
+
+.detail-grid span{
+  padding:16px;
+  border:1px solid var(--line);
+  background:#fbf8f2;
+  color:#3f3f3f;
+  border-radius:8px;
+  font-weight:700;
+}
+
+.project-details .button{
+  margin-top:22px;
+}
+
+@media (max-width:900px){
+  .jumpsite-layout{
+    grid-template-columns:1fr;
+  }
+  .jumpsite-menu{
+    position:static;
   }
 }
