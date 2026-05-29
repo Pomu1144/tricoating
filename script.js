@@ -230,84 +230,31 @@ document.querySelectorAll(".lead-form").forEach((form) => {
   });
 });
 
-document.addEventListener("click", (event) => {
-  const removeButton = event.target.closest("[data-remove-cart]");
-  if (!removeButton) return;
 
-  const cart = getCart();
-  cart.splice(Number(removeButton.dataset.removeCart), 1);
-  saveCart(cart);
-});
+const safetySearch = document.querySelector(".safety-search");
+const safetyCards = Array.from(document.querySelectorAll(".sheet-card"));
+const safetyCount = document.querySelector("[data-safety-count]");
+const noSheetsMessage = document.querySelector("[data-no-sheets]");
 
-document.querySelectorAll(".store-filters button[data-filter]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const filter = button.dataset.filter;
-    document.querySelectorAll(".store-filters button[data-filter]").forEach((item) => item.classList.remove("active"));
-    button.classList.add("active");
-    document.querySelectorAll(".store-card").forEach((card) => {
-      card.hidden = filter !== "all" && card.dataset.category !== filter;
-    });
+function updateSafetyLookup() {
+  if (!safetyCards.length) return;
+
+  const query = safetySearch?.value.trim().toLowerCase() || "";
+  let visibleCount = 0;
+
+  safetyCards.forEach((card) => {
+    const text = `${card.dataset.sheetText || ""} ${card.textContent}`.toLowerCase();
+    const isVisible = !query || text.includes(query);
+    card.hidden = !isVisible;
+    if (isVisible) visibleCount += 1;
   });
-});
 
-const initialCategory = new URLSearchParams(window.location.search).get("category");
-if (initialCategory) {
-  document.querySelector(`.store-filters button[data-filter="${initialCategory}"]`)?.click();
+  if (safetyCount) safetyCount.textContent = String(visibleCount);
+  if (noSheetsMessage) noSheetsMessage.hidden = visibleCount !== 0;
 }
 
-document.querySelector(".sort-products")?.addEventListener("change", (event) => {
-  const grid = document.querySelector(".store-grid");
-  if (!grid) return;
-
-  const cards = Array.from(grid.children);
-  if (event.target.value !== "featured") {
-    cards.sort((a, b) => {
-      const first = Number(a.querySelector(".add-to-cart").dataset.price);
-      const second = Number(b.querySelector(".add-to-cart").dataset.price);
-      return event.target.value === "price-asc" ? first - second : second - first;
-    });
-  }
-  cards.forEach((card) => grid.appendChild(card));
+safetySearch?.addEventListener("input", updateSafetyLookup);
+safetySearch?.form?.addEventListener("reset", () => {
+  window.setTimeout(updateSafetyLookup, 0);
 });
-
-const checkoutModal = document.querySelector(".checkout-modal");
-document.querySelector(".checkout-button")?.addEventListener("click", () => {
-  if (!getCartCount()) {
-    alert("Your cart is empty. Please add an item before checkout.");
-    return;
-  }
-
-  const user = localStorage.getItem(userKey);
-  const message = document.querySelector(".checkout-message");
-  if (user && message) {
-    message.textContent = "You are logged in. Review your cart and place your order with saved account details.";
-  }
-  checkoutModal?.showModal();
-});
-
-document.querySelector(".show-guest")?.addEventListener("click", () => {
-  const guestForm = document.querySelector(".guest-form");
-  if (guestForm) guestForm.hidden = false;
-});
-
-document.querySelector(".place-order")?.addEventListener("click", () => {
-  const message = document.querySelector(".checkout-message");
-  if (message) message.textContent = "Thank you. Your guest checkout details were received and a confirmation email will be sent.";
-  saveCart([]);
-});
-
-document.querySelector(".login-form")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const email = new FormData(event.currentTarget).get("email");
-  localStorage.setItem(userKey, JSON.stringify({ email }));
-  event.currentTarget.querySelector(".form-note").textContent = `Logged in as ${email}. You can now return to the store checkout.`;
-});
-
-document.querySelector(".order-lookup-form")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const email = new FormData(event.currentTarget).get("lookupEmail");
-  const result = document.querySelector(".order-lookup-result");
-  if (result) result.textContent = `We found the lookup request for ${email}. A confirmation link would be emailed in production.`;
-});
-
-renderCart();
+updateSafetyLookup();
