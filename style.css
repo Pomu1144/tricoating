@@ -1519,3 +1519,72 @@ body{
     display:none;
   }
 }
+
+/* mobile navigation and logo touch fixes */
+@media (max-width:820px){
+  .topbar__inner{
+    gap:12px;
+    min-height:76px;
+  }
+
+  .topbar__brand{
+    flex:1 1 auto;
+    min-width:0;
+  }
+
+  .topbar__contacts{
+    display:none;
+  }
+
+  .site-logo{
+    width:clamp(180px,62vw,340px);
+    max-width:100%;
+    max-height:72px;
+  }
+
+  .menu-toggle{
+    flex:0 0 46px;
+    position:relative;
+    z-index:31;
+  }
+
+  .primary-nav{
+    z-index:30;
+  }
+
+  .primary-nav a,
+  .nav-group>button{
+    white-space:normal;
+    overflow-wrap:anywhere;
+    line-height:1.2;
+    padding:14px 20px;
+    text-align:left;
+    touch-action:manipulation;
+  }
+
+  .dropdown a{
+    padding:12px 28px;
+  }
+
+  .category-card h3,
+  .page-hero h1,
+  .hero-slide__content h1{
+    overflow-wrap:break-word;
+    hyphens:auto;
+  }
+}
+
+@media (max-width:560px){
+  .topbar__inner{
+    width:min(100% - 24px,1180px);
+  }
+
+  .site-logo{
+    width:clamp(170px,60vw,240px);
+    max-height:64px;
+  }
+
+  .category-card h3{
+    font-size:1.12rem;
+  }
+}
