@@ -347,41 +347,97 @@ function getDangerMatch(message) {
   return productDangerNotes.find((item) => item.keys.some((key) => normalized.includes(key)));
 }
 
+function parseProjectNumbers(text) {
+  return Array.from(text.matchAll(/\d[\d,]*(?:\.\d+)?/g)).map((match) => ({
+    value: Number(match[0].replace(/,/g, "")),
+    index: match.index,
+    raw: match[0]
+  }));
+}
+
+function parseProjectQuantity(text, dimensionMatch) {
+  if (dimensionMatch) {
+    const beforeDimension = text.slice(0, dimensionMatch.index);
+    const leadingQuantity = beforeDimension.match(/(?:i\s+have|have|need)?\s*(\d[\d,]*(?:\.\d+)?)\s*$/i);
+    if (leadingQuantity) return Number(leadingQuantity[1].replace(/,/g, ""));
+  }
+
+  const quantityPatterns = [
+    /(?:i\s+have|have|quantity|qty|count|need|for)\s+(\d[\d,]*(?:\.\d+)?)\s+(?:of\s+)?(?:those|these|them|garages?|tiles?|units?|rooms?|pieces?|surfaces?|areas?)\b/i,
+    /(?:those|these|them)\s*(?:x|×|\*)\s*(\d[\d,]*(?:\.\d+)?)/i,
+    /(\d[\d,]*(?:\.\d+)?)\s+(?:garages?|tiles?|units?|rooms?|pieces?|surfaces?|areas?)\b/i
+  ];
+
+  for (const pattern of quantityPatterns) {
+    const match = text.match(pattern);
+    if (!match) continue;
+    if (dimensionMatch && match.index >= dimensionMatch.index && match.index < dimensionMatch.index + dimensionMatch[0].length) continue;
+    return Number(match[1].replace(/,/g, ""));
+  }
+
+  return 1;
+}
+
 function calculateCoverage(message) {
   const normalized = normalizeChatText(message);
-  const numbers = normalized.match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
-  const explicitArea = normalized.match(/(\d+(?:\.\d+)?)\s*(?:sq\.?\s*ft|square\s*feet|sf)\b/);
-  let area = explicitArea ? Number(explicitArea[1]) : 0;
+  const rawText = message.toLowerCase();
+  const explicitArea = rawText.match(/(\d[\d,]*(?:\.\d+)?)\s*(?:sq\.?\s*ft|square\s*feet|sf)\b/);
+  const dimensionMatch = rawText.match(/(\d[\d,]*(?:\.\d+)?)\s*(?:x|×|by)\s*(\d[\d,]*(?:\.\d+)?)(?:\s*(?:x|×|by)\s*(\d[\d,]*(?:\.\d+)?))?/i);
+  const quantity = parseProjectQuantity(rawText, dimensionMatch);
+  let area = explicitArea ? Number(explicitArea[1].replace(/,/g, "")) : 0;
   let areaLabel = explicitArea ? "provided surface area" : "surface area";
+  let dimensionText = explicitArea ? explicitArea[1] : "";
+  let dimensionUnit = explicitArea ? "sq ft" : "ft";
 
-  if (!area && numbers.length >= 3 && /(room|wall|walls|height|lwh|l x w x h)/.test(normalized)) {
-    const [length, width, height] = numbers;
-    area = 2 * (length + width) * height;
-    areaLabel = "estimated wall area";
-  } else if (!area && numbers.length >= 2) {
-    area = numbers[0] * numbers[1];
-    areaLabel = "estimated flat area";
-  } else if (!area && numbers.length === 1) {
-    area = numbers[0];
-    areaLabel = "provided surface area";
+  if (dimensionMatch) {
+    const length = Number(dimensionMatch[1].replace(/,/g, ""));
+    const width = Number(dimensionMatch[2].replace(/,/g, ""));
+    const height = dimensionMatch[3] ? Number(dimensionMatch[3].replace(/,/g, "")) : 0;
+    if (height && /(room|wall|walls|height|lwh|l x w x h)/.test(normalized)) {
+      area = 2 * (length + width) * height;
+      areaLabel = "estimated wall area";
+      dimensionText = `${length} × ${width} × ${height}`;
+    } else {
+      area = length * width;
+      areaLabel = "estimated flat area";
+      dimensionText = `${length} × ${width}`;
+    }
+  } else if (!area) {
+    const numbers = parseProjectNumbers(rawText).map((number) => number.value);
+    if (numbers.length >= 3 && /(room|wall|walls|height|lwh|l x w x h)/.test(normalized)) {
+      const [length, width, height] = numbers;
+      area = 2 * (length + width) * height;
+      areaLabel = "estimated wall area";
+      dimensionText = `${length} × ${width} × ${height}`;
+    } else if (numbers.length >= 2) {
+      area = numbers[0] * numbers[1];
+      areaLabel = "estimated flat area";
+      dimensionText = `${numbers[0]} × ${numbers[1]}`;
+    } else if (numbers.length === 1) {
+      area = numbers[0];
+      areaLabel = "provided surface area";
+      dimensionText = `${area}`;
+      dimensionUnit = "sq ft";
+    }
   }
 
   if (!area) return null;
 
+  const totalArea = area * quantity;
   const coats = /one coat|1 coat/.test(normalized) ? 1 : 2;
   const coveragePerGallon = 325;
   const wasteFactor = 1.1;
-  const gallonsEstimate = Math.ceil((area * coats * wasteFactor) / coveragePerGallon * 10) / 10;
+  const gallonsEstimate = Math.ceil((totalArea * coats * wasteFactor) / coveragePerGallon * 10) / 10;
   const gallonsToOrder = Math.max(1, Math.ceil(gallonsEstimate));
-  const dimensionText = numbers.length ? numbers.slice(0, Math.min(numbers.length, 3)).join(" × ") : `${area}`;
-  const dimensionUnit = explicitArea || numbers.length === 1 ? "sq ft" : "ft";
 
-  return { area, areaLabel, coats, gallonsEstimate, gallonsToOrder, dimensionText, dimensionUnit, coveragePerGallon };
+  return { area: totalArea, singleArea: area, areaLabel, coats, gallonsEstimate, gallonsToOrder, dimensionText, dimensionUnit, quantity, coveragePerGallon };
 }
 
 function formatCoverage(coverage) {
   if (!coverage) return "";
-  return `For ${coverage.dimensionText} ${coverage.dimensionUnit}, I estimate about ${Math.round(coverage.area)} sq ft of ${coverage.areaLabel}. With ${coverage.coats} coat${coverage.coats > 1 ? "s" : ""}, 10% waste, and an assumed ${coverage.coveragePerGallon} sq ft/gallon coverage rate, plan for about ${coverage.gallonsEstimate} gallon${coverage.gallonsEstimate === 1 ? "" : "s"}. Exact coverage varies by surface porosity, spray loss, and product selection.`;
+  const quantityText = coverage.quantity > 1 ? ` across ${coverage.quantity.toLocaleString()} matching item${coverage.quantity === 1 ? "" : "s"}` : "";
+  const perItemText = coverage.quantity > 1 ? ` (${Math.round(coverage.singleArea)} sq ft each)` : "";
+  return `For ${coverage.dimensionText} ${coverage.dimensionUnit}${quantityText}, I estimate about ${Math.round(coverage.area).toLocaleString()} sq ft of ${coverage.areaLabel}${perItemText}. With ${coverage.coats} coat${coverage.coats > 1 ? "s" : ""}, 10% waste, and an assumed ${coverage.coveragePerGallon} sq ft/gallon coverage rate, plan for about ${coverage.gallonsEstimate.toLocaleString()} gallon${coverage.gallonsEstimate === 1 ? "" : "s"}. Exact coverage varies by surface porosity, spray loss, and product selection.`;
 }
 
 function createOrderSuggestion(profile, coverage, sourceText = "") {
