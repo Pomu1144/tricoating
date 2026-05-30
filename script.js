@@ -265,7 +265,6 @@ const coatingAssistantKnowledge = [
     project: "Bathroom / tub / tile / sink / porcelain refinishing",
     keys: ["bathroom", "tub", "tile", "sink", "shower", "porcelain", "reglazing", "ceramic"],
     productName: "Liquid Porcelain™ Tub & Tile Kit",
-    storeCategory: "Tub & Tile",
     unitPrice: 129,
     recommendation: "Use the Tub & Tile / Liquid Porcelain reglazing line for ceramic tile, porcelain tubs, sinks, and bathroom fixtures. These systems are built for refinishing hard bathroom surfaces after proper cleaning, repair, and prep.",
     safety: "Danger level: High. Many reglazing systems use flammable solvents and may use activators such as 249B with isocyanate hazards. Use strong ventilation, goggles, chemical-resistant gloves, and the respirator guidance in the safety sheets."
@@ -275,7 +274,6 @@ const coatingAssistantKnowledge = [
     project: "Wood cabinets, trim, doors, and furniture",
     keys: ["wood", "trim", "cabinet", "door", "furniture"],
     productName: "DuraKote™ Exterior Acrylic",
-    storeCategory: "Architectural",
     unitPrice: 64,
     recommendation: "For wood, choose an architectural or industrial primer/topcoat based on whether it is interior, exterior, decorative, or heavy-use. Confirm whether the surface is bare wood, previously painted, or stained so Triangle can match the primer.",
     safety: "Danger level: Moderate to High depending on solvent content. Sanding dust and solvent vapors require eye protection, gloves, and ventilation."
@@ -285,7 +283,6 @@ const coatingAssistantKnowledge = [
     project: "Concrete, masonry, pavers, and stone",
     keys: ["concrete", "garage", "floor", "patio", "masonry", "stone", "paver", "countertop"],
     productName: "Water Based Concrete Sealer",
-    storeCategory: "Concrete",
     unitPrice: 42.5,
     recommendation: "Use the Concrete Sealer / White Mountain line for concrete floors, countertops, pavers, masonry, and stone. Pick penetrating, water-based, high-gloss, or slip-resistant options based on the final look and traffic.",
     safety: "Danger level: Moderate unless using high-solvent sealers. Keep ignition sources away, ventilate, and avoid skin/eye contact."
@@ -295,7 +292,6 @@ const coatingAssistantKnowledge = [
     project: "Industrial metal, equipment, marine, OEM, and maintenance coatings",
     keys: ["industrial", "metal", "equipment", "marine", "oem", "maintenance", "antenna", "steel", "aluminum"],
     productName: "Low VOC Industrial Enamel",
-    storeCategory: "Industrial",
     unitPrice: 78,
     recommendation: "Use the Industrial Coating line for metal, equipment, marine, OEM, antenna, and maintenance work. These jobs often need substrate-specific primers and performance requirements such as corrosion resistance or government specs.",
     safety: "Danger level: High for many industrial coatings because of flammability and solvent exposure. Use explosion-proof ventilation where needed and review the SDS before spraying."
@@ -305,7 +301,6 @@ const coatingAssistantKnowledge = [
     project: "Decorative coatings and specialty effects",
     keys: ["decorative", "metallic", "patina", "rust", "effect", "finish", "chemical dye", "dye", "dying"],
     productName: "Decorative Coating Project Kit",
-    storeCategory: "Decorative",
     unitPrice: 49,
     recommendation: "Use Decorative Coating products for metallic, patina, rust, chemical-dye style effects, and architectural finishes on paintable surfaces. Best selection depends on indoor/outdoor exposure and desired finish.",
     safety: "Danger level: Low to Moderate for many decorative applications, but check the exact sheet for solvents, pigments, and ventilation needs."
@@ -315,7 +310,6 @@ const coatingAssistantKnowledge = [
     project: "General purpose architectural painting/coating",
     keys: ["wall", "house", "architectural", "interior", "exterior", "siding", "general purpose", "general", "painting", "paint"],
     productName: "DuraKote™ Exterior Acrylic",
-    storeCategory: "Architectural",
     unitPrice: 64,
     recommendation: "Use Architectural Coating products for interior/exterior walls, siding, and general-purpose building surfaces. Choose primer and finish by substrate, exposure, sheen, and VOC requirements.",
     safety: "Danger level: Low to Moderate for many architectural coatings, higher for solventborne or urethane systems. Follow label ventilation and PPE requirements."
@@ -325,7 +319,6 @@ const coatingAssistantKnowledge = [
     project: "Artist oils and fine-art surfaces",
     keys: ["artist", "oil", "canvas", "painting", "fine art"],
     productName: "Classic Artist Oils",
-    storeCategory: "Artist",
     unitPrice: 16.6,
     recommendation: "Use Classic Artist Oils for fine-art painting where heavy pigmentation, buttery texture, and consistent color are the priority.",
     safety: "Danger level: Low to Moderate. Avoid ingestion and prolonged skin contact, and keep solvent-soaked rags handled safely if reducers or cleaners are used."
@@ -340,16 +333,13 @@ const productDangerNotes = [
   { keys: ["249gfc900", "clear acrylic", "urethane"], text: "249GFC900 clear acrylic urethane danger level: High. It is flammable and can irritate skin/eyes, sensitize skin, and be harmful if inhaled." }
 ];
 
-const assistantProfilesById = Object.fromEntries(coatingAssistantKnowledge.map((profile) => [profile.id, profile]));
-
 function normalizeChatText(text = "") {
   return text.toLowerCase().replace(/[^a-z0-9. x/,-]/g, " ");
 }
 
-function getCoatingMatch(message, preferredId = "") {
-  if (preferredId && assistantProfilesById[preferredId]) return assistantProfilesById[preferredId];
+function getCoatingMatch(message) {
   const normalized = normalizeChatText(message);
-  return coatingAssistantKnowledge.find((item) => item.keys.some((key) => normalized.includes(key))) || assistantProfilesById.architectural;
+  return coatingAssistantKnowledge.find((item) => item.keys.some((key) => normalized.includes(key)));
 }
 
 function getDangerMatch(message) {
@@ -357,13 +347,9 @@ function getDangerMatch(message) {
   return productDangerNotes.find((item) => item.keys.some((key) => normalized.includes(key)));
 }
 
-function parseDimensionNumbers(text) {
-  return normalizeChatText(text).match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
-}
-
-function calculateCoverage(message, options = {}) {
-  const normalized = normalizeChatText(`${message} ${options.shape || ""}`);
-  const numbers = parseDimensionNumbers(`${message} ${options.dimensions || ""}`);
+function calculateCoverage(message) {
+  const normalized = normalizeChatText(message);
+  const numbers = normalized.match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
   const explicitArea = normalized.match(/(\d+(?:\.\d+)?)\s*(?:sq\.?\s*ft|square\s*feet|sf)\b/);
   let area = explicitArea ? Number(explicitArea[1]) : 0;
   let areaLabel = explicitArea ? "provided surface area" : "surface area";
@@ -382,7 +368,7 @@ function calculateCoverage(message, options = {}) {
 
   if (!area) return null;
 
-  const coats = /one coat|1 coat/.test(normalized) ? 1 : Number(options.coats) || 2;
+  const coats = /one coat|1 coat/.test(normalized) ? 1 : 2;
   const coveragePerGallon = 325;
   const wasteFactor = 1.1;
   const gallonsEstimate = Math.ceil((area * coats * wasteFactor) / coveragePerGallon * 10) / 10;
@@ -407,18 +393,12 @@ function createOrderSuggestion(profile, coverage, sourceText = "") {
     quantity: 1,
     productName: profile.productName,
     gallons,
-    profileId: profile.id,
     sourceText
   };
 }
 
-function buildRecommendationText(profile, coverage) {
-  const coverageText = coverage ? `${formatCoverage(coverage)} ` : "To build the order, tell me the surface area or dimensions, number of coats, and whether it will be brushed, rolled, or sprayed. ";
-  return `${profile.project}: ${profile.recommendation} ${coverageText}${profile.safety} Would you like to add this to your cart?`;
-}
-
 function addSuggestionToCart(suggestion) {
-  if (!suggestion) return "I do not have an order ready yet. Choose a project from the dropdowns or tell me the surface and dimensions first.";
+  if (!suggestion) return "I do not have an order ready yet. Tell me your project surface and dimensions first.";
   const cart = getCart();
   const existing = cart.find((item) => item.name === suggestion.name);
   if (existing) existing.quantity += 1;
@@ -427,25 +407,49 @@ function addSuggestionToCart(suggestion) {
   return `${suggestion.productName} was added to your cart as ${suggestion.gallons} gallon${suggestion.gallons === 1 ? "" : "s"} / kit${suggestion.gallons === 1 ? "" : "s"} for an estimated $${suggestion.price.toFixed(2)}. You can review it from the cart link.`;
 }
 
-function buildAssistantReply(message, context = {}) {
+function createAssistantResponse(message, lastSuggestion) {
   const normalized = normalizeChatText(message);
   const requestedCart = /add.*cart|cart.*add|buy that|order that/.test(normalized);
+  if (requestedCart) {
+    return { text: addSuggestionToCart(lastSuggestion), suggestion: null, options: ["Estimate another project", "Safety help"] };
+  }
+
+  if (/other project|something else|custom|other\b/.test(normalized)) {
+    return {
+      text: "Tell me the project type and surface area in one message. Example: ‘chemical dyeing on 250 sq ft concrete’ or ‘coating 10 x 12 wood cabinets.’",
+      suggestion: null,
+      options: ["Painting/coating", "Chemical dyeing", "Safety help"]
+    };
+  }
+
   const danger = getDangerMatch(message);
-  const profile = getCoatingMatch(message, context.project);
-  const coverage = calculateCoverage(message, context);
-
-  if (requestedCart) return { text: addSuggestionToCart(context.lastSuggestion), suggestion: null };
-
-  if (/safety|ppe|danger|hazard|respirator|flammable|spill|fire|disposal|first aid/.test(normalized) && !coverage) {
-    return { text: `${danger ? `${danger.text} ` : "I can help assess the danger level by product or surface. "}Minimum safety steps: keep away from ignition sources, ventilate, wear splash-rated eye protection and chemical-resistant gloves, and use the Safety/Data Sheets page for product-specific PPE, first aid, spill, fire, and disposal guidance.` };
+  const safetyOnly = /safety|ppe|danger|hazard|respirator|flammable|spill|fire|disposal|first aid/.test(normalized) && !/\d/.test(normalized);
+  if (safetyOnly) {
+    return {
+      text: `${danger ? `${danger.text} ` : "I can help assess danger by product or surface. "}Minimum safety steps: keep away from ignition sources, ventilate, wear splash-rated eye protection and chemical-resistant gloves, and use the Safety/Data Sheets page for product-specific PPE, first aid, spill, fire, and disposal guidance.`,
+      suggestion: null,
+      options: ["Bathroom tile estimate", "Other project"]
+    };
   }
 
-  if (/hello|hi|start|chat/.test(normalized) && !coverage) {
-    return { text: "Hi — use the dropdowns for a guided order or tell me your project type, surface/material, dimensions or square footage, number of coats, and whether this is painting, coating, chemical dyeing, refinishing, or sealing." };
+  const profile = getCoatingMatch(message);
+  const coverage = calculateCoverage(message);
+  if (!profile && !coverage) {
+    return {
+      text: "What are you coating? You can type a short request like ‘bathroom tile 6x8’, ‘concrete garage 20x22’, ‘wood cabinets 120 sq ft’, or choose an option below.",
+      suggestion: null,
+      options: ["Bathroom tile estimate", "Concrete floor estimate", "Other project"]
+    };
   }
 
-  const suggestion = createOrderSuggestion(profile, coverage, message);
-  return { text: buildRecommendationText(profile, coverage), suggestion };
+  const selectedProfile = profile || coatingAssistantKnowledge.find((item) => item.id === "architectural");
+  const coverageText = coverage ? `${formatCoverage(coverage)} ` : "Send dimensions or square footage and I can estimate gallons. ";
+  const suggestion = createOrderSuggestion(selectedProfile, coverage, message);
+  return {
+    text: `${selectedProfile.project}: ${selectedProfile.recommendation} ${coverageText}${selectedProfile.safety} Would you like to add this to your cart?`,
+    suggestion,
+    options: ["Add to cart", "Change size", "Safety help"]
+  };
 }
 
 function createAiChatbot() {
@@ -458,21 +462,10 @@ function createAiChatbot() {
       AI Order Help
     </button>
     <section class="ai-chatbot__panel" id="ai-chatbot-panel" aria-live="polite">
-      <div class="ai-chatbot__header"><div><strong>Triangle AI Order Assistant</strong><span>Coverage, coating use, safety, and cart help</span></div><button class="ai-chatbot__close" type="button" aria-label="Close AI chat">×</button></div>
+      <div class="ai-chatbot__header"><div><strong>Triangle AI Order Assistant</strong><span>Message-based order, coverage, and safety help</span></div><button class="ai-chatbot__close" type="button" aria-label="Close AI chat">×</button></div>
       <div class="ai-chatbot__messages"></div>
-      <div class="ai-chatbot__controls">
-        <form class="ai-project-form" aria-label="Guided coating project order">
-          <label>Project type<select name="project"><option value="bathroom">Bathroom, tub, tile, sink, porcelain</option><option value="concrete">Concrete, masonry, pavers, stone</option><option value="wood">Wood cabinets, trim, furniture</option><option value="industrial">Industrial metal or equipment</option><option value="decorative">Decorative / chemical-dye effect</option><option value="architectural">General architectural painting</option><option value="artist">Artist oils / fine art</option><option value="other">Other</option></select></label>
-          <label>Coating family<select name="coating"><option value="bathroom">Liquid Porcelain / Tub & Tile</option><option value="concrete">Concrete sealer</option><option value="industrial">Industrial coating</option><option value="decorative">Decorative coating</option><option value="architectural">Architectural coating</option><option value="artist">Artist oils</option><option value="other">Other</option></select></label>
-          <label>Surface<select name="surface"><option>Ceramic tile</option><option>Porcelain tub</option><option>Sink or fixture</option><option>Concrete floor</option><option>Wood</option><option>Metal</option><option>Wall or siding</option><option>Canvas</option><option>Other</option></select></label>
-          <label>Shape / size<select name="shape"><option value="flat">Flat rectangle: length × width</option><option value="room">Room walls: length × width × height</option><option value="tub">Tub or shower surround</option><option value="surface-area">Known square footage</option><option value="other">Other</option></select></label>
-          <label>Dimensions or square footage<input name="dimensions" type="text" placeholder="Example: 10 x 12, 8 x 10 x 9, or 600 sq ft"></label>
-          <div class="ai-project-form__other" hidden><label>Describe the project / process<input name="otherProject" type="text" placeholder="Painting, coating, chemical dyeing, sealing..."></label><label>Surface area if known<input name="otherArea" type="text" placeholder="Example: 250 sq ft"></label></div>
-          <button class="ai-chatbot__send" type="submit">Plan order</button>
-        </form>
-        <div class="ai-chatbot__chips"><button class="ai-chatbot__chip" type="button">Bathroom tile 6x8</button><button class="ai-chatbot__chip" type="button">Concrete garage 20x22</button><button class="ai-chatbot__chip" type="button">Wood cabinet safety</button><button class="ai-chatbot__chip ai-chatbot__add" type="button">Add suggested order to cart</button></div>
-        <form class="ai-chatbot__form"><input class="ai-chatbot__input" type="text" placeholder="Ask or type: add that to my cart" aria-label="Ask the AI coating assistant" /><button class="ai-chatbot__send" type="submit">Send</button><p class="ai-chatbot__note">Guidance is for planning. Confirm product choice, SDS, and order details with Triangle Coatings.</p></form>
-      </div>
+      <div class="ai-chatbot__options" aria-label="Suggested replies"></div>
+      <form class="ai-chatbot__form"><input class="ai-chatbot__input" type="text" placeholder="Type your project, size, or ‘add to cart’..." aria-label="Ask the AI coating assistant" /><button class="ai-chatbot__send" type="submit">Send</button><p class="ai-chatbot__note">Guidance is for planning. Confirm product choice, SDS, and order details with Triangle Coatings.</p></form>
     </section>
   `;
 
@@ -481,10 +474,9 @@ function createAiChatbot() {
   const toggle = chatbot.querySelector(".ai-chatbot__toggle");
   const close = chatbot.querySelector(".ai-chatbot__close");
   const messages = chatbot.querySelector(".ai-chatbot__messages");
-  const chatForm = chatbot.querySelector(".ai-chatbot__form");
-  const projectForm = chatbot.querySelector(".ai-project-form");
+  const options = chatbot.querySelector(".ai-chatbot__options");
+  const form = chatbot.querySelector(".ai-chatbot__form");
   const input = chatbot.querySelector(".ai-chatbot__input");
-  const addButton = chatbot.querySelector(".ai-chatbot__add");
   let lastSuggestion = null;
 
   function addMessage(text, fromUser = false) {
@@ -495,9 +487,19 @@ function createAiChatbot() {
     messages.scrollTop = messages.scrollHeight;
   }
 
-  function handleAssistantResult(result) {
+  function setOptions(nextOptions = []) {
+    options.innerHTML = nextOptions.map((option) => `<button class="ai-chatbot__option" type="button">${option}</button>`).join("");
+  }
+
+  function runAssistant(text, fromOption = false) {
+    const normalizedOption = normalizeChatText(text);
+    const message = normalizedOption === "add to cart" ? "add that to my cart" : text;
+    addMessage(text, true);
+    const result = createAssistantResponse(message, lastSuggestion);
     if (result.suggestion) lastSuggestion = result.suggestion;
     addMessage(result.text);
+    setOptions(result.options);
+    if (!fromOption) input.value = "";
   }
 
   function setOpen(isOpen) {
@@ -506,71 +508,23 @@ function createAiChatbot() {
     if (isOpen) window.setTimeout(() => input.focus({ preventScroll: true }), 80);
   }
 
-  function guidedFormText(formData) {
-    const selectedProject = formData.get("project");
-    const selectedCoating = formData.get("coating");
-    const surface = formData.get("surface");
-    const shape = formData.get("shape");
-    const dimensions = formData.get("dimensions") || "";
-    const otherProject = formData.get("otherProject") || "";
-    const otherArea = formData.get("otherArea") || "";
-    const isOther = [selectedProject, selectedCoating, surface, shape].some((value) => String(value).toLowerCase() === "other");
-
-    if (isOther && !otherProject && !otherArea && !dimensions) {
-      return { needsDetails: true, text: "For Other projects, please tell me the surface area, what type of project this is (painting, coating, chemical dyeing, sealing, refinishing, etc.), and which product family you are considering." };
-    }
-
-    return {
-      needsDetails: false,
-      context: { project: selectedProject === "other" ? selectedCoating : selectedProject, coating: selectedCoating, surface, shape, dimensions },
-      text: `${selectedProject} project using ${selectedCoating} coating on ${surface}. Shape/size: ${shape}. Dimensions: ${dimensions || otherArea}. ${otherProject}`
-    };
-  }
-
   toggle.addEventListener("click", () => setOpen(!chatbot.classList.contains("is-open")));
   close.addEventListener("click", () => setOpen(false));
-
-  projectForm.addEventListener("change", () => {
-    const formData = new FormData(projectForm);
-    const showOther = [formData.get("project"), formData.get("coating"), formData.get("surface"), formData.get("shape")].some((value) => String(value).toLowerCase() === "other");
-    projectForm.querySelector(".ai-project-form__other").hidden = !showOther;
+  options.addEventListener("click", (event) => {
+    const option = event.target.closest(".ai-chatbot__option");
+    if (!option) return;
+    runAssistant(option.textContent, true);
   });
 
-  projectForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const guided = guidedFormText(new FormData(projectForm));
-    if (guided.needsDetails) {
-      addMessage(guided.text);
-      return;
-    }
-    addMessage("Plan this project", true);
-    handleAssistantResult(buildAssistantReply(guided.text, { ...guided.context, lastSuggestion }));
-  });
-
-  chatbot.querySelectorAll(".ai-chatbot__chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
-      const text = chip.textContent;
-      if (chip.classList.contains("ai-chatbot__add")) {
-        addMessage(text, true);
-        addMessage(addSuggestionToCart(lastSuggestion));
-        return;
-      }
-      addMessage(text, true);
-      handleAssistantResult(buildAssistantReply(text, { lastSuggestion }));
-      setOpen(true);
-    });
-  });
-
-  chatForm.addEventListener("submit", (event) => {
+  form.addEventListener("submit", (event) => {
     event.preventDefault();
     const text = input.value.trim();
     if (!text) return;
-    addMessage(text, true);
-    handleAssistantResult(buildAssistantReply(text, { lastSuggestion }));
-    input.value = "";
+    runAssistant(text);
   });
 
-  addMessage("Hi — use the dropdowns to choose a project, coating, surface, shape, and size, or type a request. I can estimate gallons, explain danger levels, and add the suggested order to your cart when you say, ‘Add that to my cart.’");
+  addMessage("Hi — tell me what you’re coating and the size, like ‘bathroom tile 6x8’ or ‘concrete garage 20x22.’ I’ll estimate coverage, note safety concerns, and ask if you want it added to your cart.");
+  setOptions(["Bathroom tile estimate", "Concrete floor estimate", "Other project"]);
 }
 
 createAiChatbot();
