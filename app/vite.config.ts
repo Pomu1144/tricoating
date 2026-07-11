@@ -10,29 +10,37 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { fileURLToPath } from "node:url";
 
-// The vendored @higgsfield/quanta components import their glyphs from the private
-// Nexus-only `@higgsfield-ai/icons`. Generated sites build on the PUBLIC npm
-// registry, so we redirect every `@higgsfield-ai/icons/*` import to a Material
-// Symbols shim instead (see src/lib/quanta-material-icons.ts). tsconfig.json has
-// the matching `paths` entry so type-checking resolves it too.
-const QUANTA_ICONS_SHIM = fileURLToPath(
-  new URL("./src/lib/quanta-material-icons.ts", import.meta.url),
+// `cloudflare:workers` is a workerd runtime built-in (it exposes the Worker env
+// / bindings). It does not exist under plain `vite dev` on Node, and when the
+// dep scanner cannot resolve it Vite skips ALL pre-bundling — which then leaves
+// CommonJS deps like React unoptimized and crashes SSR ("module is not
+// defined"). In dev we alias it to a tiny shim so the scanner resolves it and
+// pre-bundling proceeds. The Worker build keeps the real module external (see
+// `ssr.external` / `rollupOptions.external`), so production is untouched.
+const CF_WORKERS_DEV_SHIM = fileURLToPath(
+  new URL("./src/lib/cloudflare-workers.dev-shim.ts", import.meta.url),
 );
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const designInspectorEnabled = process.env.HF_DESIGN_INSPECTOR === "1" || mode === "design";
 
   return {
-    resolve: {
-      alias: [{ find: /^@higgsfield-ai\/icons(\/.*)?$/, replacement: QUANTA_ICONS_SHIM }],
-    },
+    resolve:
+      command === "serve"
+        ? { alias: [{ find: "cloudflare:workers", replacement: CF_WORKERS_DEV_SHIM }] }
+        : undefined,
     // The server bundle runs as a Cloudflare Worker — there is no node_modules
     // at runtime. Vite's default SSR build leaves npm deps as bare external
     // imports (h3, react, @tanstack/*, seroval, …), which resolve on a Node
     // server but throw "No such module" in a Worker. Bundle them all in.
     // (node: builtins stay external — nodejs_compat provides them.)
     ssr: {
-      noExternal: true,
+      // Bundle every npm dep into the Worker build. In dev the SSR runtime is
+      // Node (with node_modules), so we leave `noExternal` at its default —
+      // deps resolve from node_modules with correct CJS interop. Forcing
+      // `noExternal: true` in dev makes Vite's module runner evaluate CommonJS
+      // deps like React as raw CJS ("module is not defined").
+      noExternal: command === "build" ? true : undefined,
       // `cloudflare:workers` is a workerd runtime built-in that exposes the Worker
       // env / bindings (D1 `DB`, R2 `STORAGE`). Like node: builtins it must NOT be
       // bundled; the runtime provides it. (`ssr.external` is typed string[].)
@@ -53,9 +61,7 @@ export default defineConfig(({ mode }) => {
           icon: true,
           svgProps: { fill: "currentColor" },
           svgoConfig: {
-            plugins: [
-              { name: "preset-default", params: { overrides: { removeViewBox: false } } },
-            ],
+            plugins: [{ name: "preset-default", params: { overrides: { removeViewBox: false } } }],
           },
         },
       }),
