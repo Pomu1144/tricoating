@@ -1,0 +1,14 @@
+{
+  "name": "Triangle Coatings Inc.",
+  "short_name": "Triangle Coatings",
+  "description": "Industrial, architectural, and specialty coatings manufacturer since 1932.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#14171b",
+  "theme_color": "#14171b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
