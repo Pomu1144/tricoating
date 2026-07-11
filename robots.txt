@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pomu1144.github.io/tricoating/sitemap.xml
