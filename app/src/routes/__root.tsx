@@ -8,8 +8,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
-import { button } from "@higgsfield/quanta/button";
-import { NotFound } from "@higgsfield/quanta/not-found";
 
 import appCss from "../styles.css?url";
 import { reportHiggsfieldError } from "../lib/higgsfield-error-reporting";
@@ -108,19 +106,25 @@ function buildHead(meta: AppMeta) {
   };
 }
 
+// Shared button styles (previously supplied by quanta's `button()` helper).
+const btnBase =
+  "inline-flex items-center justify-center rounded-md px-4 h-10 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tc-red";
+const btnPrimary = `${btnBase} bg-tc-red text-tc-bone hover:bg-tc-red-deep`;
+const btnOutline = `${btnBase} border border-tc-line text-tc-bone hover:bg-white/5`;
+
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-q-background-primary px-4">
-      <NotFound
-        className="mx-auto max-w-md"
-        icon={<span className="text-q-title-md-semi-bold text-q-text-primary">404</span>}
-        title="Page not found"
-        subtitle="The page you're looking for doesn't exist or has been moved."
-      >
-        <Link to="/" className={button({ variant: "primary", size: "md" }, "mt-3")}>
+    <div className="flex min-h-dvh items-center justify-center bg-tc-ink px-4">
+      <div className="mx-auto max-w-md text-center">
+        <span className="text-2xl font-semibold text-tc-bone">404</span>
+        <h1 className="mt-2 text-xl font-semibold text-tc-bone">Page not found</h1>
+        <p className="mt-2 text-sm text-tc-mute">
+          The page you're looking for doesn't exist or has been moved.
+        </p>
+        <Link to="/" className={`${btnPrimary} mt-4`}>
           Go home
         </Link>
-      </NotFound>
+      </div>
     </div>
   );
 }
@@ -133,10 +137,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-q-background-primary px-4">
+    <div className="flex min-h-dvh items-center justify-center bg-tc-ink px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-q-title-lg-semi-bold text-q-text-primary">This page didn't load</h1>
-        <p className="mt-2 text-q-body-sm-regular text-q-text-secondary">
+        <h1 className="text-2xl font-semibold text-tc-bone">This page didn't load</h1>
+        <p className="mt-2 text-sm text-tc-mute">
           Something went wrong on our end. You can try refreshing or head back home.
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -145,11 +149,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className={button({ variant: "primary", size: "md" })}
+            className={btnPrimary}
           >
             Try again
           </button>
-          <a href="/" className={button({ variant: "outline", size: "md" })}>
+          <a href="/" className={btnOutline}>
             Go home
           </a>
         </div>
@@ -176,7 +180,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-q-background-primary text-q-text-primary">
+      <body className="bg-tc-ink text-tc-bone">
         {children}
         <Scripts />
       </body>
