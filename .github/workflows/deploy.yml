@@ -1,0 +1,46 @@
+name: Deploy to Cloudflare Workers
+
+# Deploys the Triangle Coatings site (a TanStack Start SSR app) to Cloudflare
+# Workers on every push to main. One-time account setup — creating the D1
+# database, filling in its id, and adding the two secrets below — is documented
+# in DEPLOY.md.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   – token with "Edit Cloudflare Workers" + D1 edit perms
+#   CLOUDFLARE_ACCOUNT_ID  – your Cloudflare account id
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Apply D1 migrations
+        run: bunx wrangler d1 migrations apply tricoating-db --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Deploy to Cloudflare Workers
+        run: bunx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
